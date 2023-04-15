@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+
+import '../../themes/app_text_styles.dart';
+
+class LabelButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+  final TextStyle? style;
+  const LabelButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.style,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 56,
+      child: TextButton(
+        onPressed: () {},
+        child: Text(
+          label,
+          style: style ?? AppTextStyles.buttonHeading,
+        ),
+      ),
+    );
+  }
+}
