@@ -65,7 +65,10 @@ class _HomePageState extends State<HomePage> {
                 controller.setPage(0);
                 setState(() {});
               },
-              icon: Icon(Icons.home, color: AppColors.primary)),
+              icon: Icon(Icons.home,
+                  color: controller.currentPage == 0
+                      ? AppColors.primary
+                      : AppColors.body)),
           GestureDetector(
             onTap: () {
               // Navigator.pushNamed(context, "/barcode_scanner");
@@ -86,7 +89,10 @@ class _HomePageState extends State<HomePage> {
                 controller.setPage(1);
                 setState(() {});
               },
-              icon: Icon(Icons.description_outlined, color: AppColors.body)),
+              icon: Icon(Icons.description_outlined,
+                  color: controller.currentPage == 1
+                      ? AppColors.primary
+                      : AppColors.body)),
         ]),
       ),
     );

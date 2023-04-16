@@ -25,7 +25,7 @@ class _ExtractPageState extends State<ExtractPage> {
           padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
           child: Row(
             children: [
-              Text("Meus boletos", style: AppTextStyles.titleBoldHeading),
+              Text("Meus Extratos", style: AppTextStyles.titleBoldHeading),
             ],
           ),
         ),
