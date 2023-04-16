@@ -47,8 +47,12 @@ class _MeusBoletosPageState extends State<MeusBoletosPage> {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Divider(color: AppColors.stroke),
         ),
-        BoletoListWidget(
-          controller: controller,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: BoletoListWidget(
+            controller: controller,
+            key: UniqueKey(),
+          ),
         )
       ]),
     );

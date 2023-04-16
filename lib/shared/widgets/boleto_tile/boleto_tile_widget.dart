@@ -13,15 +13,15 @@ class BoletoTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
         contentPadding: EdgeInsets.zero,
-        title: Text(data.name!, style: AppTextStyles.titleListTile),
-        subtitle:
-            Text("Vence em ${data.dueDate}", style: AppTextStyles.captionBody),
+        title: Text(data.name ?? '', style: AppTextStyles.titleListTile),
+        subtitle: Text("Vence em ${data.dueDate ?? ''}",
+            style: AppTextStyles.captionBody),
         trailing: Text.rich(TextSpan(
             text: "R\$ ",
             style: AppTextStyles.trailingRegular,
             children: [
               TextSpan(
-                text: "${data.value!.toStringAsFixed(2)}",
+                text: "${data.value?.toStringAsFixed(2) ?? '0.00'}",
                 style: AppTextStyles.trailingBold,
               )
             ])));

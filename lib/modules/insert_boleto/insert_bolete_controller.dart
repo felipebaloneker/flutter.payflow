@@ -6,6 +6,7 @@ import '../../shared/models/boleto_model.dart';
 class InsertBoletoController {
   final formKey = GlobalKey<FormState>();
   BoletoModel model = BoletoModel();
+
   String? validateName(String? value) =>
       value?.isEmpty ?? true ? "O nome não pode ser vazio" : null;
   String? validateVencimento(String? value) =>
@@ -24,7 +25,10 @@ class InsertBoletoController {
   Future<void> saveBoleto() async {
     final instance = await SharedPreferences.getInstance();
     final boletos = instance.getStringList("boletos") ?? <String>[];
+
     boletos.add(model.toJson());
+    print(boletos);
+    await instance.setStringList("boletos", boletos);
   }
 
   Future<void> cadastrar() async {

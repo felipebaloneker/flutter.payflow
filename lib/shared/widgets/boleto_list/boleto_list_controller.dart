@@ -4,10 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class BoletoListController {
   final boletosNotifier = ValueNotifier<List<BoletoModel>>(<BoletoModel>[]);
-  List<BoletoModel> get boletos => <BoletoModel>[];
+  List<BoletoModel> get boletos => boletosNotifier.value;
   set boletos(List<BoletoModel> value) => boletosNotifier.value = value;
 
-  BoletoListCofntroller() {
+  BoletoListController() {
     getBoletos();
   }
 
@@ -20,5 +20,9 @@ class BoletoListController {
     } catch (error) {
       boletos = <BoletoModel>[];
     }
+  }
+
+  void dispose() {
+    boletosNotifier.dispose();
   }
 }
