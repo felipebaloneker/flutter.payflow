@@ -21,8 +21,7 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
     controller.getAvailableCameras();
     controller.statusNotifier.addListener(() {
       if (controller.status.hasBarcode) {
-        Navigator.pushReplacementNamed(context, "/insert_boleto",
-            arguments: controller.status.barcode);
+        Navigator.pushReplacementNamed(context, "/insert_boleto");
       }
     });
     super.initState();
@@ -60,9 +59,7 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
                     child: controller.cameraController!.buildPreview(),
                   );
                 } else {
-                  return Container(
-                    child: Text('Cant preview'),
-                  );
+                  return Container();
                 }
               }),
           RotatedBox(

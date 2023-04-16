@@ -6,6 +6,7 @@ import 'package:payflow/modules/splash/splash_page.dart';
 import 'package:payflow/shared/themes/app_colors.dart';
 import 'firebase_options.dart';
 import 'modules/barcode_scanner/barcode_scanner_page.dart';
+import 'modules/insert_boleto/insert_boleto_page.dart';
 import 'modules/login/login_page.dart';
 
 void main() async {
@@ -43,6 +44,7 @@ class _AppFirebaseState extends State<AppFirebase> {
         "/home": (context) => HomePage(),
         "/login": (context) => LoginPage(),
         "/barcode_scanner": (context) => BarcodeScannerPage(),
+        "/insert_boleto": (context) => InsertBoletoPage(),
       },
     );
   }
