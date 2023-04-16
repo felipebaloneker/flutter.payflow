@@ -25,6 +25,7 @@ class BarcodeScannerController {
           CameraController(camera, ResolutionPreset.max, enableAudio: false);
       await cameraController!.initialize();
       scanWithCamera();
+      listenCamera();
     } catch (e) {
       status = BarcodeScannerStatus.error(e.toString());
     }
@@ -41,7 +42,7 @@ class BarcodeScannerController {
 
       if (barcode != null && status.barcode.isEmpty) {
         status = BarcodeScannerStatus.barcode(barcode);
-        if (status.cameraController != null) cameraController!.dispose();
+        cameraController!.dispose();
         await barcodeScanner.close();
       }
 
@@ -52,66 +53,59 @@ class BarcodeScannerController {
   }
 
   void scanWithImagePicker() async {
-    await status.cameraController!.stopImageStream();
     final response = await ImagePicker().pickImage(source: ImageSource.gallery);
     final inputImage = InputImage.fromFilePath(response!.path);
     scannerBarCode(inputImage);
   }
 
   void scanWithCamera() {
-    status = BarcodeScannerStatus.available(cameraController!);
+    status = BarcodeScannerStatus.available();
     Future.delayed(Duration(seconds: 20)).then((value) {
-      if (status.cameraController != null) {
-        if (status.cameraController!.value.isStreamingImages) {
-          status.cameraController!.stopImageStream();
-        }
+      if (status.hasBarcode == false) {
+        status = BarcodeScannerStatus.error("Timeout de leitura de boleto");
       }
-      status = BarcodeScannerStatus.error("Timeout de leitura de boleto");
     });
-    listenCamera();
   }
 
   void listenCamera() {
-    if (cameraController != null) {
-      if (cameraController!.value.isStreamingImages == false) {
-        cameraController!.startImageStream((cameraImage) async {
-          if (status.stopScanner == false) {
-            try {
-              final WriteBuffer allBytes = WriteBuffer();
-              for (Plane plane in cameraImage.planes) {
-                allBytes.putUint8List(plane.bytes);
-              }
-              final bytes = allBytes.done().buffer.asUint8List();
-              final Size imageSize = Size(
-                  cameraImage.width.toDouble(), cameraImage.height.toDouble());
-              final InputImageRotation imageRotation =
-                  InputImageRotation.rotation0deg;
-              final InputImageFormat inputImageFormat = InputImageFormat.nv21;
-              final planeData = cameraImage.planes.map(
-                (Plane plane) {
-                  return InputImagePlaneMetadata(
-                    bytesPerRow: plane.bytesPerRow,
-                    height: plane.height,
-                    width: plane.width,
-                  );
-                },
-              ).toList();
-
-              final inputImageData = InputImageData(
-                size: imageSize,
-                imageRotation: imageRotation,
-                inputImageFormat: inputImageFormat,
-                planeData: planeData,
-              );
-              final inputImageCamera = InputImage.fromBytes(
-                  bytes: bytes, inputImageData: inputImageData);
-              scannerBarCode(inputImageCamera);
-            } catch (e) {
-              print(e);
+    if (cameraController!.value.isStreamingImages == false) {
+      cameraController!.startImageStream((cameraImage) async {
+        if (status.stopScanner == false) {
+          try {
+            final WriteBuffer allBytes = WriteBuffer();
+            for (Plane plane in cameraImage.planes) {
+              allBytes.putUint8List(plane.bytes);
             }
+            final bytes = allBytes.done().buffer.asUint8List();
+            final Size imageSize = Size(
+                cameraImage.width.toDouble(), cameraImage.height.toDouble());
+            final InputImageRotation imageRotation =
+                InputImageRotation.rotation0deg;
+            final InputImageFormat inputImageFormat = InputImageFormat.nv21;
+            final planeData = cameraImage.planes.map(
+              (Plane plane) {
+                return InputImagePlaneMetadata(
+                  bytesPerRow: plane.bytesPerRow,
+                  height: plane.height,
+                  width: plane.width,
+                );
+              },
+            ).toList();
+
+            final inputImageData = InputImageData(
+              size: imageSize,
+              imageRotation: imageRotation,
+              inputImageFormat: inputImageFormat,
+              planeData: planeData,
+            );
+            final inputImageCamera = InputImage.fromBytes(
+                bytes: bytes, inputImageData: inputImageData);
+            scannerBarCode(inputImageCamera);
+          } catch (e) {
+            print(e);
           }
-        });
-      }
+        }
+      });
     }
   }
 
